@@ -20,7 +20,7 @@ public class Person {
     @Column
     private LocalDate driverLicenseExpiringDate;
     @ManyToMany
-    @JoinTable(name = "person's_car",
+    @JoinTable(name = "persons_car",
     joinColumns = @JoinColumn(name = "person_id"),
     inverseJoinColumns = @JoinColumn(name = "car_id"))
     Set<Car> cars;
