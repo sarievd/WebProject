@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/person")
 public class PersonController {
 
     @Autowired
     private PersonService personService;
 
-    @GetMapping("/person/{id}")
+    @GetMapping("/{id}")
     public Optional<Person> getPerson(@PathVariable("id") Long id){
         return personService.getPerson(id);
     }
@@ -24,12 +25,12 @@ public class PersonController {
         return personService.getAllPersons();
     }
 
-    @PostMapping("/person")
+    @PostMapping("/")
     public void addPerson(@RequestBody Person person){
         personService.addPerson(person);
     }
 
-    @DeleteMapping("/person/{id}")
+    @DeleteMapping("/{id}")
     public void deletePerson(@PathVariable("id") Long id){
         personService.deletePerson(id);
     }

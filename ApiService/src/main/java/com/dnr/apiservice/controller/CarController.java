@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 @RestController
+@RequestMapping("/car")
 public class CarController {
 
     @Autowired
     private CarService carService;
 
-    @GetMapping("/car/{id}")
+    @GetMapping("/{id}")
     public Optional<Car> getCar(@PathVariable("id") Long id){
         return carService.getCar(id);
     }
@@ -23,12 +24,12 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    @PostMapping("/car")
+    @PostMapping("/")
     public void addCar(@RequestBody Car car){
         carService.addCar(car);
     }
 
-    @DeleteMapping("/car/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCar(@PathVariable("id") Long id){
         carService.deleteCar(id);
     }
