@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/photoUpload")
 public class PhotoController {
     @Autowired
     private PersonPhotoStorageService personPhotoStorageService;
