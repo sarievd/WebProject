@@ -24,7 +24,11 @@ public class PersonPhotoStorageService {
     private FileStorageProperties fileStorageProperties;
 
         public String photoUpload(MultipartFile photo) {
-            checkingPhoto(photo);
+            try {
+                checkingPhoto(photo);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             byte[] bytes = new byte[0];
             try {
                 bytes = photo.getBytes();
@@ -32,15 +36,16 @@ public class PersonPhotoStorageService {
                 e.printStackTrace();
             }
             Path path = Paths.get(fileStorageProperties.getUploadDir() + photo.getOriginalFilename());
+            System.out.println(path);
             try {
                 Files.write(path, bytes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return "photo saved!";
+            return String.valueOf(path);
         }
 
-    private void checkingPhoto(MultipartFile photo){
+    private void checkingPhoto(MultipartFile photo) throws IOException {
         if(photo.isEmpty())
             throw new NoPhotoException("File is empty");
         if(!photo.getOriginalFilename().matches("[-_a-z0-9]+.(jpeg|png)$"))
@@ -48,8 +53,15 @@ public class PersonPhotoStorageService {
         if (photo.getSize() > 1048576)
             throw new ImageSizeException("The image's size is bigger than 1 MB");
         BufferedImage img = null;
+        String fileName[] = photo.getOriginalFilename().split("\\.");
+        System.out.println(fileName[0]);
+        System.out.println(fileName[1]);
+        File temp = File.createTempFile(fileName[0], fileName[1]);
+        FileOutputStream fos = new FileOutputStream(temp);
+        fos.write(photo.getBytes());
+        fos.close();
         try {
-            img = ImageIO.read(convert(photo));
+            img = ImageIO.read(temp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,14 +69,12 @@ public class PersonPhotoStorageService {
         int height         = img.getHeight();
         if (width > 354 && height > 472)
             throw new ImageResolutionException("The image's resolution should be in 354x472PX");
+        temp.delete();
     }
 
-    private static File convert(MultipartFile file) throws IOException {
-        File convFile = new File(file.getOriginalFilename());
-        convFile.createNewFile();
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
-    }
+//    private File convert(MultipartFile file) throws IOException {
+////        File convFile = new File(file.getOriginalFilename());
+//
+//        return convFile;
+//    }
 }

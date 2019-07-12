@@ -1,0 +1,10 @@
+create sequence my_seq_car start 1 increment 1;
+create sequence my_seq_person start 1 increment 1;
+create sequence my_seq_person_black_list start 1 increment 1;
+create table car (car_id int8 not null, car_mark varchar(30) not null, car_model varchar(30) not null, car_year date not null, primary key (car_id));
+create table person (person_id int8 not null, birth_date date not null, driver_license varchar(10) not null, driver_license_expiring_date date not null, name varchar(30) not null, photo_path varchar(255), surname varchar(30) not null, primary key (person_id));
+create table person_black_list (bl_id int8 not null, adding_date date not null, definition varchar(256) not null, expirng_date date not null, person_id int8, primary key (bl_id));
+create table persons_car (person_id int8 not null, car_id int8 not null, primary key (person_id, car_id));
+alter table if exists person_black_list add constraint FK5apc7r2kh5knpp5l7bwbysrp6 foreign key (person_id) references person;
+alter table if exists persons_car add constraint FKmaujheo6iv9twituib0w7hx43 foreign key (car_id) references car;
+alter table if exists persons_car add constraint FKll9cpdlgdqbbm0uwbudtpvcbk foreign key (person_id) references person;
